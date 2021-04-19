@@ -1,0 +1,59 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+    WorkingDir="."
+    Version="10.0"
+    VendorName="SlickEdit"
+    TemplateName="SystemVerilog">
+    <Files>
+        <Folder
+            Name="Source Files"
+            Filters="*.sv;*.v"
+            GUID="{8B536019-EB38-47C5-8232-8367A3A1F4E8}">
+            <F N="TOP/DUT/adder.v"/>
+            <F N="TOP/ENV/agent.sv"/>
+            <F N="TOP/DUT/alu_input_stage.v"/>
+            <F N="TOP/DUT/alu_output_stage.v"/>
+            <F N="TOP/DUT/calc2_top.v"/>
+            <F N="TOP/ENV/checker.sv"/>
+            <F N="TOP/ENV/definitions.sv"/>
+            <F N="TOP/ENV/driver.sv"/>
+            <F N="TOP/ENV/environment.sv"/>
+            <F N="TOP/ENV/generator.sv"/>
+            <F N="TOP/DUT/holdreg.v"/>
+            <F N="TOP/ENV/interface.sv"/>
+            <F N="TOP/ENV/monitor.sv"/>
+            <F N="TOP/DUT/mux_out.v"/>
+            <F N="TOP/DUT/priority.v"/>
+            <F N="TOP/ENV/scoreboard.sv"/>
+            <F N="TOP/DUT/shifter.v"/>
+            <F N="TOP/tb_top.sv"/>
+            <F N="TOP/tests.sv"/>
+            <F N="TOP/ENV/transaction.sv"/>
+        </Folder>
+        <Folder
+            Name="Header Files"
+            Filters="*.svh;*.svi;*.vh"
+            GUID="{D3C25D09-6B0C-423A-AA19-9E6F5E89B30D}"/>
+        <Folder
+            Name="Other Files"
+            Filters=""
+            GUID="{D8A0C6E3-6FF4-4ED0-9ACE-D72CFB4FFD9E}"/>
+    </Files>
+    <Config
+        Name="Release"
+        OutputFile=""
+        CompilerConfigName="">
+        <Menu>
+            <Target
+                Name="Build"
+                MenuCaption="&amp;Build"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                RunFromDir="%rw">
+                <Exec CmdLine=""/>
+            </Target>
+        </Menu>
+    </Config>
+    <List Name="RTE">
+    </List>
+</Project>
