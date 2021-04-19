@@ -1,4 +1,5 @@
 `include "definitions.sv"
+
 class transaction;
 	static int count = 0;
 	int id;

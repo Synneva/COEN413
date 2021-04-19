@@ -30,7 +30,4 @@ class generator;
 		-> ended;   	// trigger end event
 	endtask
 
-	
-
-
 endclass

@@ -1,10 +1,12 @@
 // converts high level to low level?
 
+`include "transaction.sv"
+
 class agent;
-    mailbox gen2agt, agt2scb, agt2drv;
+    mailbox #(transaction) gen2agt, agt2scb, agt2drv[NUM_PORTS];
     transaction tr;
 
-	function new(mailbox #(transaction) gen2agt, agt2scb, agt2drv);
+	function new(mailbox #(transaction) gen2agt, agt2scb, agt2drv[]);
 		this.gen2agt = gen2agt;
 		this.agt2scb = agt2scb;
 		this.agt2drv = agt2drv;

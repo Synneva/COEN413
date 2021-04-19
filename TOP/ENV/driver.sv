@@ -17,25 +17,23 @@ class driver;
 	int trans_count;
 	transaction tr;
 	drv_if intf;
-	mailbox agt2drv;
+	mailbox #(transaction) agt2drv;
+	int port;
 
-	function new(drv_if intf, mailbox agt2drv);
+	function new(drv_if intf, mailbox agt2drv, int i);
 		this.intf = intf;
-		this agt2drv = agt2drv;
+		this.agt2drv = agt2drv;
+		this.port = i;
 	endfunction
 
 
 	task reset;
-		wait(intf.reset);	// ?
 		$display("DRIVER Reset started");
-		// reset needs to be held high for 3 cycles + drive input ports low
-		intf.DRIVER.reset <= 1;			// idk if right
-		`DRV_CB.req1_cmd_in		<= 0;
-		`DRV_CB.req1_data_in	<= 0;
-		`DRV_CB.req1_tag_in		<= 0;
-		repeat(3) @(posedge intf.DRIVER.clk);
-		intf.DRIVER.reset <= 0;
-		$display("DRIVER Reset ended");
+		`DRV_CB.cmd_in	<= 0;
+		`DRV_CB.data_in	<= 0;
+		`DRV_CB.tag_in	<= 0;
+		repeat(3) @(posedge intf.clk);
+		$display("DRIVER Reset complete");
 	endtask
 
 
@@ -44,20 +42,17 @@ class driver;
 			// drive all inputs low, will block on get if nothing there
 			agt2drv.get(tr);
 			// turn into signals for dut
-			// something like this
-			//  should probably make interface for one port	and have array of 4
-				// port[] controlled by tr.ports ?
 			`DRV_CB.cmd_in		<= tr.cmd;
 			`DRV_CB.data_in		<= tr.data1;
 			`DRV_CB.tag_in		<= tr.tag;
-			@(posedge intf.DRIVER.clk);
+			@(posedge intf.clk);
 			`DRV_CB.cmd_in		<= 0;
 			`DRV_CB.data_in		<= tr.data2;
 			`DRV_CB.tag_in		<= 0;
-			@(posedge intf.DRIVER.clk);
+			@(posedge intf.clk);
 			`DRV_CB.data_in		<= 0;
 
-			// display stuff
+			$display("Drove transaction %0s on port %0d", tr.cmd, port);
 
 			trans_count++;
 

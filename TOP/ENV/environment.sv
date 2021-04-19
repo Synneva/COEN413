@@ -9,9 +9,9 @@
 /*
                                               
     Generator and Driver activity can be divided and controlled in three methods.
-        pre_test() – Method to call Initialization. i.e, reset method.           
-        test() – Method to call Stimulus Generation and Stimulus Driving.        
-        post_test() – Method to wait the completion of generation and driving.   
+        pre_test() ï¿½ Method to call Initialization. i.e, reset method.           
+        test() ï¿½ Method to call Stimulus Generation and Stimulus Driving.        
+        post_test() ï¿½ Method to wait the completion of generation and driving.   
     run task to call methods, $finish; to end simulation                         
 */
 
@@ -47,11 +47,12 @@ class environment;
 	// constructor gets interfaces from tests object
 	function new(calc_if intf[NUM_PORTS]);
 		this.intf = intf;
+		
 		gen2agt = new();
 		agt2scb = new();
-
-		agt2drv = new();
-		// and the rest i guess
+		scb2chk = new();
+		agt2drv = new[NUM_PORTS];
+		mon2chk = new[NUM_PORTS];
 
 		gen = new(gen2agt, repeat_count, gen_ended);
 		agt = new(gen2agt, agt2scb, agt2drv);
@@ -59,8 +60,15 @@ class environment;
 		chk = new(scb2chk, mon2chk);
 
 		drv = new[NUM_PORTS];
+		mon = new[NUM_PORTS];
+
 		for (int i = 0; i < NUM_PORTS; i++) begin
-			drv[i] = new(intf[i], agt2drv[i]);
+			agt2drv[i] = new();
+			mon2chk[i] = new();
+			drv[i] = new(intf[i].DRIVER, agt2drv[i], i);
+			drv[i].reset;
+			mon[i] = new(intf[i].MONITOR, mon2chk[i], i);
+		end
 
 	endfunction
 
