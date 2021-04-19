@@ -1,3 +1,4 @@
 {
-    "verilog.linting.linter": "modelsim"
+    "verilog.linting.linter": "modelsim",
+    "verilog.languageServer": "`svls`"
 }

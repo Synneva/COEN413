@@ -7,8 +7,8 @@
 	*/
 
 `include "tests.sv"
-`include "TOP\DUT\calc2_top.v"
-`include "TOP\ENV\interface.sv"
+`include "calc2_top.v"
+`include "interface.sv"
 
 module tb_top;
 
@@ -33,7 +33,7 @@ module tb_top;
 
 
 	// interface instances???? can i do this idk
-	calc_if intf [NUM_PORTS] (clk,reset);
+	virtual calc_if intf [NUM_PORTS] (clk,reset);
 
 	// test instance
 	tests t1(intf);
