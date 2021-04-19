@@ -6,7 +6,7 @@
 typedef virtual calc_if.DRIVER drv_if;
 typedef virtual calc_if.MONITOR mon_if;
 
-interface calc_if(input logic clk, reset);      // reset controlled in top or test, update driver
+interface calc_if(input wire clk, reset);      // reset controlled in top or test, update driver
 
 	// Port signals
 	logic [CMD_WIDTH-1:0]   cmd_in;

@@ -19,7 +19,7 @@ class agent;
 		gen2agt.get(tr);
 		// process?
 		agt2scb.put(tr);
-		agt2drv.put(tr);
+		//agt2drv.put(tr);	// array, put in right port's mailbox
 	end	
 	endtask
 

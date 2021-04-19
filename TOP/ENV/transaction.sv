@@ -1,3 +1,6 @@
+`ifndef TRANSACTIONS
+`define TRANSACTIONS
+
 `include "definitions.sv"
 
 class transaction;
@@ -44,3 +47,4 @@ class output_transaction;
 
 
 endclass
+`endif

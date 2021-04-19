@@ -1,3 +1,6 @@
+`ifndef	DEFS
+`define DEFS
+
 `default_nettype none
 
 parameter CMD_WIDTH = 4;
@@ -14,4 +17,4 @@ parameter RESP_WIDTH = 2;
 
 parameter NUM_PORTS = 4;
 
-
+`endif

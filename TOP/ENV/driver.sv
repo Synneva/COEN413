@@ -32,7 +32,7 @@ class driver;
 		`DRV_CB.cmd_in	<= 0;
 		`DRV_CB.data_in	<= 0;
 		`DRV_CB.tag_in	<= 0;
-		repeat(3) @(posedge intf.clk);
+		repeat(3) @(`DRV_CB);
 		$display("DRIVER Reset complete");
 	endtask
 

@@ -20,8 +20,8 @@ class generator;
 	endfunction
 
 	task main();
-		$display($time, ": Starting generator for %0d transactions", repeat_count)
-		repeat(repeat_count) begin  	// how many transactions to generate, specified in test
+		$display($time, ": Starting generator for %0d transactions", repeat_count);
+		repeat (repeat_count) begin  	// how many transactions to generate, specified in test
 			if(!this.tr.randomize()) 
 				$fatal("Gen: trans randomization failed");  // Randomize transaction
 			gen2agt.put(tr);								// put in mailbox

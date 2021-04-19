@@ -16,7 +16,7 @@ class check;
 	task main;
 		forever begin
 			scb2chk.get(expected);
-			mon2chk.get(actual);		// this is an array of 4 now
+			// mon2chk.get(actual);		// this is an array of 4 now
 				// need logic to combine responses, or separate otr from scb
 
 			// compare + print i guess

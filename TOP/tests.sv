@@ -7,7 +7,7 @@ test code in program block
 
 `include "environment.sv"
 
-program automatic tests(calc_if [] intf);
+program automatic tests(calc_if intf);
 	environment env;
 
 	// transactions constraints? ports, commands

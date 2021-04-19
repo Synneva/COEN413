@@ -14,7 +14,7 @@ class scoreboard;
 	transaction tr;
 	output_transaction otr;
 
-	function new(mailbox agt2scb, scb2chk)
+	function new(mailbox agt2scb, scb2chk);
 		this.agt2scb = agt2scb;
 		this.scb2chk = scb2chk;
 	endfunction
@@ -29,7 +29,7 @@ class scoreboard;
 		end
 	endtask
 
-	function output_transaction expected_output(transaction tr, output_transaction otr);
+	function expected_output(transaction tr, output_transaction otr);
 		otr.out_tag = tr.tag;
 		case(tr.cmd)
 

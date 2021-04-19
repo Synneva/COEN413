@@ -26,6 +26,7 @@
 
 
 class environment;
+	int repeat_count = 30;
 
 	// testbench components
 	generator 	gen;
@@ -45,7 +46,7 @@ class environment;
 	event gen_ended;
 
 	// constructor gets interfaces from tests object
-	function new(calc_if intf[NUM_PORTS]);
+	function new(virtual calc_if intf[NUM_PORTS]);
 		this.intf = intf;
 		
 		gen2agt = new();
@@ -59,14 +60,13 @@ class environment;
 		scb = new(agt2scb, scb2chk);
 		chk = new(scb2chk, mon2chk);
 
-		drv = new[NUM_PORTS];
-		mon = new[NUM_PORTS];
+		//drv = new[NUM_PORTS];
+		//mon = new[NUM_PORTS];
 
 		for (int i = 0; i < NUM_PORTS; i++) begin
 			agt2drv[i] = new();
 			mon2chk[i] = new();
 			drv[i] = new(intf[i].DRIVER, agt2drv[i], i);
-			drv[i].reset;
 			mon[i] = new(intf[i].MONITOR, mon2chk[i], i);
 		end
 
@@ -74,9 +74,9 @@ class environment;
 
 
 	// tasks for pre_test, test, post_test, run?
-	task pre_test()
+	task pre_test();
 		// initialization, reset n stuf
-		drv.reset();
+		//drv.reset;
 
 	endtask
 
@@ -84,13 +84,13 @@ class environment;
 		// fork main()s
 		fork
 			gen.main;
-			drv.main; // etc
+			//drv.main; // etc
 		join_any
 	endtask
 
 	task post_test();
 		wait(gen.ended.triggered());
-		wait(gen.repeat_count == drv.trans_count);
+		//wait(gen.repeat_count == drv.trans_count);
 		wait(gen.repeat_count == scb.trans_count);
 	endtask
 
