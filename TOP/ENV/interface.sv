@@ -16,7 +16,7 @@ interface calc_if(input wire clk, reset);      // reset controlled in top or tes
 
 	// clocking blocks
 
-	clocking driver_cb @(posedge clk);	// check dut
+	clocking driver_cb @(posedge clk);
 		output 	cmd_in;
 		output	data_in;
 		output	tag_in;

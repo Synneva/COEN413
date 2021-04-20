@@ -1,6 +1,4 @@
 [verilog]
-include_paths = ["C:\Users\syn\AppData\Local\Programs\Microsoft VS Code\bin"]
-defines = ["DEBUG", "VAR=1"]
-
+include_paths = ["TOP/.*"]
 [option]
 linter = true

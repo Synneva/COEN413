@@ -26,36 +26,34 @@ class driver;
 		this.port = i;
 	endfunction
 
-
+	// drive all inputs low
 	task reset;
 		$display("DRIVER Reset started");
 		`DRV_CB.cmd_in	<= 0;
 		`DRV_CB.data_in	<= 0;
 		`DRV_CB.tag_in	<= 0;
-		repeat(3) @(`DRV_CB);
+		//repeat(3) @(`DRV_CB);
 		$display("DRIVER Reset complete");
 	endtask
 
 
 	task main;
+		reset;	// drive all inputs low, will block on get if nothing there
 		forever begin
-			// drive all inputs low, will block on get if nothing there
 			agt2drv.get(tr);
 			// turn into signals for dut
 			`DRV_CB.cmd_in		<= tr.cmd;
 			`DRV_CB.data_in		<= tr.data1;
 			`DRV_CB.tag_in		<= tr.tag;
-			@(posedge intf.clk);
+			@(`DRV_CB);
 			`DRV_CB.cmd_in		<= 0;
 			`DRV_CB.data_in		<= tr.data2;
 			`DRV_CB.tag_in		<= 0;
-			@(posedge intf.clk);
+			@(`DRV_CB);
 			`DRV_CB.data_in		<= 0;
 
-			$display("Drove transaction %0s on port %0d", tr.cmd, port);
-
 			trans_count++;
-
+			$display("Drove transaction %0s on port %0d (%0d)", tr.cmd, port, trans_count);
 		end
 	endtask
 

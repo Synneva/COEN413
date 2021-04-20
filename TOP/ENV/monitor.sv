@@ -28,17 +28,17 @@ class monitor;
 	endfunction
 
 	task main;
+	forever begin
 		// turn dut outputs into output_transaction object
 
-		// wait for something? out_resp?
 		wait(MON_CB.out_resp);
 		otr.out_resp = `MON_CB.out_resp;
 		otr.out_data = `MON_CB.out_data;
 		otr.out_tag = `MON_CB.out_tag;
-
+		otr.ports = port;
 		mon2chk.put(otr);
 
-
+	end
 	endtask
 
 endclass

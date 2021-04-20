@@ -16,7 +16,7 @@ program automatic tests(calc_if intf);
 
 	// coverpoints here or in env? here i think
 		// coverpoints for ports, commands, data ranges/specific values, 
-		// cross for different functionaily tests
+		// cross for different functionality tests
 
 
 	initial begin

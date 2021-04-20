@@ -14,12 +14,17 @@ class agent;
 
 	// function build?
 
-	task run;
+	task main;
 	forever begin
 		gen2agt.get(tr);
-		// process?
+
 		agt2scb.put(tr);
-		//agt2drv.put(tr);	// array, put in right port's mailbox
+
+		foreach(agt2drv[i]) begin
+			// bitwise AND to choose input ports
+			if(tr.ports & (i+1)) agt2drv[i].put(tr);
+		end
+
 	end	
 	endtask
 

@@ -1,7 +1,6 @@
 `ifndef	DEFS
 `define DEFS
 
-
 parameter CMD_WIDTH = 4;
 parameter DATA_WIDTH = 32;
 parameter TAG_WIDTH = 2;
@@ -15,5 +14,6 @@ typedef enum bit[CMD_WIDTH-1:0] {   NOOP,       // 0
 parameter RESP_WIDTH = 2;
 
 parameter NUM_PORTS = 4;
+parameter NUM_TAGS = 2**TAG_WIDTH;
 
 `endif

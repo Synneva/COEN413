@@ -9,7 +9,7 @@ class transaction;
 	
 	rand operation  			cmd;
 	rand bit [DATA_WIDTH-1:0]   data1, data2;
-	rand bit [TAG_WIDTH-1:0]	tag;
+		 bit [TAG_WIDTH-1:0]	tag; 
 	rand bit [NUM_PORTS-1:0]	ports;
 
 	constraint port1 { ports == 1; }	 // not sure if declare here + turn on/off in test or declare higher up
@@ -21,6 +21,7 @@ class transaction;
 	// constraints?
 	// functions for display, copy, compare?
 
+/*
 	function transaction copy();
 		transaction to = new();
 		to.cmd  	= this.cmd;
@@ -29,7 +30,7 @@ class transaction;
 		to.tag  	= this.tag;
 		copy = to;
 	endfunction: copy
-
+*/
 endclass
 
 class output_transaction;

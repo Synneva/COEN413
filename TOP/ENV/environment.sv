@@ -84,7 +84,7 @@ class environment;
 		// fork main()s
 		fork
 			gen.main;
-			//drv.main; // etc
+			drv[0].main; // etc
 		join_any
 	endtask
 
