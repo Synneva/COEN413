@@ -2,7 +2,7 @@
 //  Module:  Priority logic
 //  Author:  Naseer Siddique
 
-module priority (prio_adder_cmd, prio_adder_tag, prio_adder_out_vld, prio_adder_data1, prio_adder_data2, prio_shift_cmd, prio_shift_tag, prio_shift_out_vld, prio_shift_data1, prio_shift_data2, port1_invalid_op, port1_invalid_op, port1_invalid_tag, port2_invalid_op, port2_invalid_tag, port3_invalid_op, port3_invalid_tag, port4_invalid_op, port4_invalid_tag, scan_out, hold1_data1, hold1_data2, hold2_data1, hold2_data2, hold3_data1, hold3_data2, hold4_data1, hold4_data2, hold1_tag, hold2_tag, hold3_tag, hold4_tag, hold1_cmd, hold2_cmd, hold3_cmd, hold4_cmd, reset, scan_in, a_clk, b_clk, c_clk);
+module PRIORITY (prio_adder_cmd, prio_adder_tag, prio_adder_out_vld, prio_adder_data1, prio_adder_data2, prio_shift_cmd, prio_shift_tag, prio_shift_out_vld, prio_shift_data1, prio_shift_data2, port1_invalid_op, port1_invalid_op, port1_invalid_tag, port2_invalid_op, port2_invalid_tag, port3_invalid_op, port3_invalid_tag, port4_invalid_op, port4_invalid_tag, scan_out, hold1_data1, hold1_data2, hold2_data1, hold2_data2, hold3_data1, hold3_data2, hold4_data1, hold4_data2, hold1_tag, hold2_tag, hold3_tag, hold4_tag, hold1_cmd, hold2_cmd, hold3_cmd, hold4_cmd, reset, scan_in, a_clk, b_clk, c_clk);
 
    output[0:3] prio_adder_cmd, prio_adder_tag;
    output      prio_adder_out_vld, prio_shift_out_vld, port1_invalid_op, port2_invalid_op, port3_invalid_op, port4_invalid_op, scan_out;

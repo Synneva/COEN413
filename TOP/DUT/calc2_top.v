@@ -231,7 +231,7 @@ module calc2_top ( out_data1, out_data2, out_data3, out_data4, out_resp1, out_re
 		       .shift_tag(shiftmux_out_tag1)
 		       );
 
-   priority priority1( 
+   PRIORITY priority1( 
 		       .a_clk(a_clk), 
 		       .b_clk(b_clk),  
 		       .c_clk(c_clk), 

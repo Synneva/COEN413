@@ -6,6 +6,7 @@
 	Add logic to generate the dump?
 	*/
 
+
 `include "tests.sv"
 `include "calc2_top.v"
 `include "interface.sv"
@@ -22,18 +23,18 @@ module tb_top;
 
 		// generate reset, might keep here might move depends if it works
 		#5ns reset = 1;
-		#5ns clk = 1
+		#5ns clk = 1;
 
-		#5ns reset = 0
+		#5ns reset = 0;
 		clk = 0;
 		
 		forever
 			#5ns clk = ~clk;
 	end
-
+	
 
 	// interface instances???? can i do this idk
-	virtual calc_if intf [NUM_PORTS] (clk,reset);
+	virtual calc_if intf [NUM_PORTS];
 
 	// test instance
 	tests t1(intf);

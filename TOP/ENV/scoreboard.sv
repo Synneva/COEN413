@@ -29,7 +29,7 @@ class scoreboard;
 		end
 	endtask
 
-	function expected_output(transaction tr, output_transaction otr);
+	function void expected_output(transaction tr, output_transaction otr);
 		otr.out_tag = tr.tag;
 		case(tr.cmd)
 

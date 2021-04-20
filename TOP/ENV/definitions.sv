@@ -1,7 +1,6 @@
 `ifndef	DEFS
 `define DEFS
 
-`default_nettype none
 
 parameter CMD_WIDTH = 4;
 parameter DATA_WIDTH = 32;
