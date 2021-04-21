@@ -63,7 +63,7 @@ main idea: 2 threads, one gets from scb, other from monitors
 			// separate by port
 			for(int i = 0; i<NUM_PORTS; i++) begin
 				// push expected output to the right queue in expected[port][tag]
-				if(tr.ports[i]) expected[i][tr.tag].push_back(tr_ex);
+				if(tr_ex.ports[i]) expected[i][tr_ex.out_tag].push_back(tr_ex);
 			end
 		end
 	endtask

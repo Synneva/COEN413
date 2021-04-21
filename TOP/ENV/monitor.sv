@@ -31,7 +31,7 @@ class monitor;
 	forever begin
 		// turn dut outputs into output_transaction object
 
-		wait(MON_CB.out_resp);
+		wait(`MON_CB.out_resp);
 		otr.out_resp = `MON_CB.out_resp;
 		otr.out_data = `MON_CB.out_data;
 		otr.out_tag = `MON_CB.out_tag;
