@@ -33,15 +33,15 @@ class environment;
 	agent		agt;
 	scoreboard	scb;
 	check		chk;
-	driver		drv[NUM_PORTS];
-	monitor		mon[NUM_PORTS];
+	driver		drv;
+	monitor		mon;
 
 	// interface ports
 	virtual calc_if intf;
 	
 	// mailboxes for ipc
-	mailbox #(transaction) gen2agt, agt2drv [], agt2scb;
-	mailbox #(output_transaction) scb2chk, mon2chk [];
+	mailbox #(transaction) gen2agt, agt2drv, agt2scb;
+	mailbox #(output_transaction) scb2chk, mon2chk;
 
 	event gen_ended;
 
@@ -52,23 +52,18 @@ class environment;
 		gen2agt = new();
 		agt2scb = new();
 		scb2chk = new();
-		agt2drv = new [NUM_PORTS];
-		mon2chk = new [NUM_PORTS];
+		agt2drv = new();
+		mon2chk = new();
 
 		gen = new(gen2agt, repeat_count, gen_ended);
 		agt = new(gen2agt, agt2scb, agt2drv);
 		scb = new(agt2scb, scb2chk);
 		chk = new(scb2chk, mon2chk);
+		drv = new(intf, agt2drv);
+		mon = new(intf, mon2chk);
 
 		//drv = new[NUM_PORTS];
 		//mon = new[NUM_PORTS];
-
-		for (int i = 0; i < NUM_PORTS; i++) begin
-			agt2drv[i] = new();
-			mon2chk[i] = new();
-			drv[i] = new(intf, agt2drv[i], i);
-			mon[i] = new(intf, mon2chk[i], i);
-		end
 
 	endfunction
 
@@ -84,7 +79,11 @@ class environment;
 		// fork main()s
 		fork
 			gen.main;
-			drv[0].main; // etc
+			agt.main;
+			drv.main;
+			scb.main;
+			mon.main;
+			chk.main;
 		join_any
 	endtask
 

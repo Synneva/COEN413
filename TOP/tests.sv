@@ -15,6 +15,8 @@ program automatic tests(calc_if intf);
 
 
 	initial begin
+	  
+	  $display("Boop");
 		env = new(intf);
 		env.gen.tr.constraint_mode(0);
 		env.gen.repeat_count = 20;

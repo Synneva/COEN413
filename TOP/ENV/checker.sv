@@ -5,7 +5,10 @@
 
 class check;
 
-	mailbox #(output_transaction) scb2chk, mon2chk[NUM_PORTS];
+	mailbox #(output_transaction) scb2chk, mon2chk;
+  output_transaction tr_ex, tr_ac;
+
+/*
 	output_transaction tr_ex, tr_ac, temp;
 	output_transaction missed_expected[$];
 
@@ -15,12 +18,12 @@ class check;
 		// this way, we can use the tag of the actual output on a given port to find the corresponding expected values
 	output_transaction expected[NUM_PORTS][NUM_TAGS][$];	// hope it works lol
 	//output_transaction[$] actual[NUM_PORTS][NUM_TAGS];
-
-	function new(mailbox #(output_transaction) scb2chk, mon2chk[]);
+*/
+	function new(mailbox #(output_transaction) scb2chk, mon2chk);
 		this.scb2chk = scb2chk;
 		this.mon2chk = mon2chk;
-		this.tr_ex = new();
-		this.tr_ac = new();
+		//this.tr_ex = new();
+		//this.tr_ac = new();
 		//this.expected = new[NUM_PORTS][NUM_TAGS];
 	endfunction
 
@@ -31,6 +34,23 @@ main idea: 2 threads, one gets from scb, other from monitors
 */
 
 	task main;
+	  scb2chk.get(tr_ex);
+	  $display("got the goods from scoreboard");
+	  mon2chk.get(tr_ac);
+	  if (tr_ex.out_tag == tr_ac.out_tag) begin
+				if (tr_ex.out_resp!=tr_ac.out_resp) begin
+					$display("error",$time);
+				end
+				if (tr_ex.out_data!=tr_ac.out_data) begin
+					$display("error",$time);
+				end
+			end else begin
+				$display("Error: Tag Mismatch",$time);
+			end
+		$display("No Errors lol"); 
+			
+		/*
+		
 		fork
 			get_scb;
 
@@ -67,8 +87,11 @@ main idea: 2 threads, one gets from scb, other from monitors
 				if(tr_ex.ports[i]) expected[i][tr_ex.out_tag].push_back(tr_ex);
 			end
 			end
+			
 		end
+*/
 	endtask
+	
 
 
 endclass

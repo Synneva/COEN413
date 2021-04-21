@@ -19,6 +19,7 @@ class scoreboard;
 	function new(mailbox #(transaction) agt2scb, mailbox #(output_transaction) scb2chk);
 		this.scb2chk = scb2chk;
 		this.agt2scb = agt2scb;
+		this.otr = new();
 	endfunction
 
 
