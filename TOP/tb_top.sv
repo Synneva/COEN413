@@ -21,8 +21,14 @@ module tb_top;
 		reset = 0;
 		clk = 0;
 
-		// generate reset, might keep here might move depends if it works
+		// generate reset
 		#5ns reset = 1;
+		#5ns clk = 1;
+		#5ns clk = 0;
+		#5ns clk = 1;
+		#5ns clk = 0;
+		#5ns clk = 1;
+		#5ns clk = 0;
 		#5ns clk = 1;
 
 		#5ns reset = 0;
@@ -33,7 +39,7 @@ module tb_top;
 	end
 	
 
-	// interface instances???? can i do this idk
+	// interface instance
 	calc_if intf(clk,reset);
 
 	// test instance

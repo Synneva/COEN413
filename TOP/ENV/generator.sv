@@ -16,11 +16,11 @@ class generator;
 	covergroup CovGroup;
     cmd : coverpoint tr.cmd 
 	{
-    	bins add    = {1};
-    	bins sub    = {2};
-	    bins shiftleft   = {5};
-	 	bins shiftright   = {6};
-		bins NOOP = {0};
+    	bins add    = {ADD};
+    	bins sub    = {SUB};
+	   bins shiftleft   = {LSL};
+	 	 bins shiftright   = {LSR};
+		  bins NOOP = {NOOP};
     }	
     data1 : coverpoint tr.data1 
 	{
@@ -39,13 +39,14 @@ class generator;
     } 
 	ports : coverpoint tr.ports 
 	{
-      	bins portOne    = {0};
+ 	  	bins portOne    = {0};
 		bins portTwo    = {1};
 		bins portThree    = {2};
 		bins portFour    = {3};
     } 
 	cross cmd, data1, data2, ports;	
   endgroup
+  
 
 	function new(mailbox #(transaction) gen2agt, int repeat_count, event ended);
 		this.gen2agt		= gen2agt;
@@ -53,6 +54,7 @@ class generator;
 		this.ended  		= ended;
 		this.gen_count = 0;
 		tr = new;
+		CovGroup = new();
 	endfunction
 
 	task main();
@@ -60,12 +62,13 @@ class generator;
 		repeat (repeat_count) begin  	// how many transactions to generate, specified in test
 			if(!this.tr.randomize()) 
 				$fatal("Gen: trans randomization failed");  // Randomize transaction
-			tr.tag = gen_count % TAG_WIDTH;					// cycle through tag values
+			tr.tag = gen_count % 4;					// cycle through tag values
 			CovGroup.sample();
 			gen2agt.put(tr);								// put in mailbox
 			gen_count++;
 		end
 		$display($time, ": End of transaction generation");
+		$display("Coverage of = %0.2f %%", CovGroup.get_coverage());
 		-> ended;   	// trigger end event
 	endtask
 

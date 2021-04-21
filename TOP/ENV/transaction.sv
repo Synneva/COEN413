@@ -61,10 +61,10 @@ class transaction;
 	}
 
 	constraint invalidCmd {
-		cmd != {0,1,2,5,6};
+		cmd != {NOOP,ADD,SUB,LSL,LSR};
 	}
 
-	function new();
+	function new;
 		id = count++;
 	endfunction
 
@@ -91,8 +91,9 @@ class output_transaction;
 	bit [DATA_WIDTH-1:0]	out_data;
 	bit [TAG_WIDTH-1:0] 	out_tag;
 	bit [NUM_PORTS-1:0]		ports;
+	int port;
 
-	function new();
+	function new;
 		id = count++;
 	endfunction
 

@@ -5,55 +5,53 @@
 
 class check;
 
-	mailbox #(output_transaction) scb2chk, mon2chk[NUM_PORTS];
-	output_transaction tr_ex, tr_ac, temp;
-	output_transaction missed_expected[$];
-
+	mailbox #(output_transaction) scb2chk, mon2chk;
+  	output_transaction tr_ex, tr_ac, temp;
 
 	// checker stores scoreboard outputs in 2d array of queues
 		// each port is associated with an array of queues, one for each possible tag
 		// this way, we can use the tag of the actual output on a given port to find the corresponding expected values
-	output_transaction expected[NUM_PORTS][NUM_TAGS][$];	// hope it works lol
+	output_transaction expected[NUM_PORTS][NUM_TAGS][$];
+
 	//output_transaction[$] actual[NUM_PORTS][NUM_TAGS];
 
-	function new(mailbox #(output_transaction) scb2chk, mon2chk[]);
+	function new(mailbox #(output_transaction) scb2chk, mon2chk);
 		this.scb2chk = scb2chk;
 		this.mon2chk = mon2chk;
-		this.tr_ex = new();
-		this.tr_ac = new();
+		this.tr_ex = new;
+		this.tr_ac = new;
 		//this.expected = new[NUM_PORTS][NUM_TAGS];
 	endfunction
 
 /*
-main idea: 2 threads, one gets from scb, other from monitors
+main forks a thread to get from scoreboard
 	scb thread splits transactions by port then by TAG and stores
 	monitor thread splits by tag (already split by port) and stores or checks?
+		currently just gets and checks
 */
 
 	task main;
+	
 		fork
 			get_scb;
-
 		join_none
 
 		forever begin
-
-			foreach(mon2chk[i]) begin
-				if(mon2chk[i].try_get(tr_ac)) begin
-				temp = expected[i][tr_ac.out_tag].pop_front;
+			
+			mon2chk.get(tr_ac);
+			wait(expected[tr_ac.port][tr_ac.out_tag].size);
+			temp = expected[tr_ac.port][tr_ac.out_tag].pop_front;
 
 					if(temp.out_resp!=tr_ac.out_resp) begin
-						$display("Checker: Port %0d: Expected response %0d, got %0d", i+1, temp.out_resp, tr_ac.out_resp);
-						missed_expected.push_back(temp);
+						$display("Checker: Port %0d: Expected response %0d, got %0d", tr_ac.port, temp.out_resp, tr_ac.out_resp);
+						//missed_expected.push_back(temp);
 					end
 					else if(temp.out_data!=tr_ac.out_data) begin
-						$display("Checker: Port %0d: Expected result %0d, got %0d", i+1, temp.out_data, tr_ac.out_data);
-						missed_expected.push_back(temp);
+						$display("Checker: Port %0d: Expected result %0d, got %0d", tr_ac.port, temp.out_data, tr_ac.out_data);
+						//missed_expected.push_back(temp);
 					end
-				end
+					else $display("Checker: Correct response on port %0d", tr_ac.port);
 			end
-		end
-
 	endtask
 
 
@@ -67,8 +65,30 @@ main idea: 2 threads, one gets from scb, other from monitors
 				if(tr_ex.ports[i]) expected[i][tr_ex.out_tag].push_back(tr_ex);
 			end
 			end
+			
 		end
+
 	endtask
+	
 
 
 endclass
+
+/*forever begin
+
+	  scb2chk.get(tr_ex);
+	  $display("got the goods from scoreboard");
+	  mon2chk.get(tr_ac);
+	  if (tr_ex.out_tag == tr_ac.out_tag) begin
+				if (tr_ex.out_resp!=tr_ac.out_resp) begin
+					$display("error",$time);
+				end
+				if (tr_ex.out_data!=tr_ac.out_data) begin
+					$display("error",$time);
+				end
+			end else begin
+				$display("Error: Tag Mismatch",$time);
+			end
+		$display("No Errors lol");
+
+	end		*/
