@@ -18,11 +18,11 @@ class agent;
 	forever begin
 		gen2agt.get(tr);
 
-		agt2scb.put(tr);
+		agt2scb.put(tr);	// forward as is to scb
 
-		foreach(agt2drv[i]) begin
-			// bitwise AND to choose input ports
-			if(tr.ports & (i+1)) agt2drv[i].put(tr);
+		// send to right drivers
+		foreach(tr.ports[i]) begin
+			if(tr.ports[i]) agt2drv[i].put(tr);
 		end
 
 	end	
