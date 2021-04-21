@@ -1,2 +1,0 @@
-[verilog]
-include_paths = ["TOP/.*"]

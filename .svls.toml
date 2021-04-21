@@ -1,4 +1,0 @@
-[verilog]
-include_paths = ["TOP/.*"]
-[option]
-linter = true
