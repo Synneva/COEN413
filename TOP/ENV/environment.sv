@@ -84,7 +84,17 @@ class environment;
 		// fork main()s
 		fork
 			gen.main;
+			agt.main;
 			drv[0].main; // etc
+			drv[1].main;
+			drv[2].main;
+			drv[3].main;
+			scb.main;
+			mon[0].main;
+			mon[1].main;
+			mon[2].main;
+			mon[3].main;
+			chk.main;
 		join_any
 	endtask
 
