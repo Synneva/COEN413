@@ -12,7 +12,44 @@ class transaction;
 		 bit [TAG_WIDTH-1:0]	tag; 
 	rand bit [NUM_PORTS-1:0]	ports;
 
-	constraint port1 { ports == 1; }	 // not sure if declare here + turn on/off in test or declare higher up
+	constraint port1Only { ports == 0; }	 // not sure if declare here + turn on/off in test or declare higher up
+	constraint port2Only { ports == 1; }
+	constraint port3Only { ports == 2; }
+	constraint port4Only { ports == 3; }
+
+	constraint addOnly { cmd == ADD; }
+	constraint subOnly { cmd == SUB; }
+	constraint LSLOnly { cmd == LSL; }
+	constraint LSROnly { cmd == LSR; }
+
+	constraint validCmd { cmd == {ADD,SUB,LSL,LSR}; }
+
+	constraint addSub { cmd == {ADD,SUB}; }
+	constraint lslLsr { cmd == {LSL,LSR}; }
+
+	constraint dataZero {
+		data1 == 0;
+		data2 == 0;
+	}
+
+	constraint dataMax {
+		data1 == 32'hFFFFFFFF;
+		data2 == 32'hFFFFFFFF;
+	}
+
+	constraint dataOverflow {
+		data1 == 1;
+		data2 == 32'hFFFFFFFF;
+	}
+
+	constraint noOverUnderFlow {
+		data1 + data2 < 32'hFFFFFFFF;
+		data1 - data2 > 0;
+	}
+
+
+	
+	
 
 	function new();
 		id = count++;

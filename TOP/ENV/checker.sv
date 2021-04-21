@@ -54,7 +54,6 @@ main idea: 2 threads, one gets from scb, other from monitors
 
 			
 			if (expected.tag == actual.tag) begin
-				logic[15:0]
 				if (expected.resp!=actual.resp) begin
 					$display("error",$time);
 				end
