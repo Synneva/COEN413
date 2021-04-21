@@ -1,5 +1,4 @@
 // checker compares between monitor (dut output) and scoreboard (expected result)
-// output to fc?
 
 `include "transaction.sv"
 
@@ -19,15 +18,10 @@ class check;
 		this.mon2chk = mon2chk;
 		this.tr_ex = new;
 		this.tr_ac = new;
-		//this.expected = new[NUM_PORTS][NUM_TAGS];
+		this.temp_ex = new;
+		this.temp_ac = new;
 	endfunction
 
-/*
-main forks a thread to get from scoreboard
-	scb thread splits transactions by port then by TAG and stores
-	monitor thread splits by tag (already split by port) and stores or checks?
-		currently just gets and checks
-*/
 
 	task main;
 	
@@ -36,34 +30,28 @@ main forks a thread to get from scoreboard
 			get_mon;
 			//start_check;
 		join_none
-
-		//forever begin
-		for(int port = 0; port<NUM_PORTS; port++) begin
-		for(int t = 0; t<NUM_TAGS; t++) begin
-			int t = 0;
-			
-		end
-		end
-		//end
 		
 	endtask
 
 	task get_mon;
 		forever begin
+			// get next output from monitor
 			mon2chk.get(tr_ac);
 			if(tr_ac.out_resp) begin
+				// push to queue
 				actual[tr_ac.port][tr_ac.out_tag].push_back(tr_ac);
+				// if the corresponding expected result has been received from scb, pop and compare them
 				if(expected[tr_ac.port][tr_ac.out_tag].size) begin
-				temp_ac = actual[tr_ac.port][tr_ac.out_tag].pop_front;
-				temp_ex = expected[tr_ac.port][tr_ac.out_tag].pop_front;
+					temp_ac = actual[tr_ac.port][tr_ac.out_tag].pop_front;
+					temp_ex = expected[tr_ac.port][tr_ac.out_tag].pop_front;
 
 				if(temp_ex.out_resp!=temp_ac.out_resp) begin
 						$display("Checker: Port %0d: Expected response %0d, got %0d", tr_ac.port, temp_ex.out_resp, temp_ac.out_resp);
-						//missed_expected.push_back(temp);
+						//missed_expected.push_back(temp_ex);
 				end
 				else if(temp_ex.out_data!=temp_ac.out_data) begin
 						$display("Checker: Port %0d: Expected result %0d, got %0d", tr_ac.port, temp_ex.out_data, temp_ac.out_data);
-						//missed_expected.push_back(temp);
+						//missed_expected.push_back(temp_ex);
 				end
 				else $display("Checker: Correct response on port %0d", tr_ac.port);
 			end
