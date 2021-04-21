@@ -11,17 +11,16 @@ monitor translates signal level (objects/events) info to high level (signal leve
 `include "transaction.sv"
 `include "interface.sv"
 
-`define MON_CB intf.monitor_cb
-
+//`define MON_CB intf.monitor_cb
 
 class monitor;
 
 	output_transaction otr;
-	mon_if intf;
+	virtual calc_if intf;
 	mailbox #(output_transaction) mon2chk;
 	int port;
 
-	function new(mon_if intf, mailbox mon2chk, int i);
+	function new(virtual calc_if intf, mailbox mon2chk, int i);
 		this.intf = intf;
 		this.mon2chk = mon2chk;
 		this.port = i;
@@ -31,10 +30,10 @@ class monitor;
 	forever begin
 		// turn dut outputs into output_transaction object
 
-		wait(`MON_CB.out_resp);
-		otr.out_resp = `MON_CB.out_resp;
-		otr.out_data = `MON_CB.out_data;
-		otr.out_tag = `MON_CB.out_tag;
+		wait(intf.MONITOR.cb.out_port[port].out_resp);
+		otr.out_resp = intf.MONITOR.cb.out_port[port].out_resp;
+		otr.out_data = intf.MONITOR.cb.out_port[port].out_data;
+		otr.out_tag = intf.MONITOR.cb.out_port[port].out_tag;
 		otr.ports = port;
 		mon2chk.put(otr);
 

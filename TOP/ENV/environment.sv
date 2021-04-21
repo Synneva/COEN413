@@ -37,7 +37,7 @@ class environment;
 	monitor		mon[NUM_PORTS];
 
 	// interface ports
-	virtual calc_if intf[NUM_PORTS];
+	virtual calc_if intf;
 	
 	// mailboxes for ipc
 	mailbox #(transaction) gen2agt, agt2drv[NUM_PORTS], agt2scb;
@@ -46,7 +46,7 @@ class environment;
 	event gen_ended;
 
 	// constructor gets interfaces from tests object
-	function new(virtual calc_if intf[NUM_PORTS]);
+	function new(virtual calc_if intf);
 		this.intf = intf;
 		
 		gen2agt = new();
@@ -66,8 +66,8 @@ class environment;
 		for (int i = 0; i < NUM_PORTS; i++) begin
 			agt2drv[i] = new();
 			mon2chk[i] = new();
-			drv[i] = new(intf[i].DRIVER, agt2drv[i], i);
-			mon[i] = new(intf[i].MONITOR, mon2chk[i], i);
+			drv[i] = new(intf, agt2drv[i], i);
+			mon[i] = new(intf, mon2chk[i], i);
 		end
 
 	endfunction
