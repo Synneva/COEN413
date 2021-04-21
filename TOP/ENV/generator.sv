@@ -65,12 +65,8 @@ class generator;
 		repeat (repeat_count) begin  	// how many transactions to generate, specified in test
 			if(!this.trs.randomize()) 
 				$fatal("Gen: trans randomization failed");  // Randomize transaction
-<<<<<<< HEAD
-			tr.tag = gen_count % NUM_TAGS;					// cycle through tag values
-=======
 		  $display("CMD: %d, PORT: %d, DATA1 %d,", trs.cmd, trs.ports, trs.data1);
 			trs.tag = gen_count % 4;					// cycle through tag values
->>>>>>> a761f565e8b7459634881c7d83887764d21fe100
 			CovGroup.sample();
 			tr = trs.copy;
 			gen2agt.put(tr);								// put in mailbox
