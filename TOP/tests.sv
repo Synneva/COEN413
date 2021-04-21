@@ -14,11 +14,6 @@ program automatic tests(calc_if intf);
 			// maybe separate files for directed, constrained, random if needed
 
 
-	// coverpoints here or in env? here i think
-		// coverpoints for ports, commands, data ranges/specific values, 
-		// cross for different functionality tests
-
-
 	initial begin
 		env = new(intf);
 		env.gen.tr.constraint_mode(0);
