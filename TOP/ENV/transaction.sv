@@ -85,6 +85,7 @@ class transaction;
 endclass
 
 class output_transaction;
+	transaction tr;
 	static int count = 0;
 	int id;
 	

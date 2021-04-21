@@ -33,6 +33,8 @@ class scoreboard;
 	endtask
 
 	function void expected_output(transaction tr, output_transaction otr);
+		otr.tr = tr;
+		trans_count++;
 		otr.out_tag = tr.tag;
 		otr.ports = tr.ports;
 		

@@ -97,7 +97,6 @@ class environment;
 		pre_test();
 		do_test();
 		post_test();
-		$finish;
 	endtask
 
 endclass

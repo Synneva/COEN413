@@ -1,16 +1,7 @@
-/*
-DRIVER receives stimulus from agent 							   
-	declare interface+mailbox, get with constructor 				
-	reset task  												   
-	(define interface to access it? `define)					   
-	drive task  												   
-	local variable to track packets driven, increment in drive/main task
-*/
+// Driver receives transactions from agent and forwards them to the right ports, based on transaction.ports
 
 `include "transaction.sv"
 `include "interface.sv"
-
-//`define DRV_CB intf.driver_cb
 
 class driver;
 
@@ -18,48 +9,39 @@ class driver;
 	transaction tr;
 	virtual calc_if.DRIVER intf;
 	mailbox #(transaction) agt2drv;
-	//int port; 
-	
 
 	function new(virtual calc_if.DRIVER intf, mailbox #(transaction) agt2drv);
 		this.intf = intf;
 		this.agt2drv = agt2drv;
+		this.trans_count = 0;
 	endfunction
 
-	// drive all inputs low
-	task reset;
-		$display("DRIVER Reset started");
+	task reset;		// reset port inputs
 		for(int i = 0; i<NUM_PORTS; i++) begin
 			intf.cb.in_port[i].cmd_in = 0;
 			intf.cb.in_port[i].data_in = 0;
 			intf.cb.in_port[i].tag_in = 0;
 		end
-		$display("DRIVER Reset complete");
+		$display("Driving inputs low");
 	endtask
 
-
 	task main;
-		reset;	// drive all inputs low, will block on get if nothing there
+		reset;	// drive all inputs low from start
 		forever begin
-			agt2drv.get(tr);
-			// turn into signals for dut
-
+			agt2drv.get(tr);	// wait for a transaction from agent
 				fork
 					drive_port(0);
 					drive_port(1);
 					drive_port(2);
 					drive_port(3);
 				join
-				
-
-			//end
-
+			$display("Drove transaction %0s on ports %0b (%0d)", tr.cmd, tr.ports, trans_count);
 			trans_count++;
 			//$display("Drove transaction %0s on port %0d (%0d)", tr.cmd, tr.ports, trans_count);
 		end
 	endtask
 
-	task drive_port(int p);
+	task drive_port(int p);		// drives input on port if transaction port matches
 		if(tr.ports[p] && (tr.cmd!=0)) begin
 		intf.cb.in_port[p].cmd_in		= tr.cmd;
 		intf.cb.in_port[p].data_in		= tr.data1;
@@ -70,7 +52,7 @@ class driver;
 		intf.cb.in_port[p].tag_in		= 0;
 		@(intf.cb);
 		intf.cb.in_port[p].data_in		= 0;
-		$display("Drove transaction %0s on port %0d (%0d)", tr.cmd, p, trans_count);
+		
 		end
 	endtask
 
