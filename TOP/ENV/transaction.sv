@@ -17,6 +17,10 @@ class transaction;
 	constraint port3Only { ports == 2; }
 	constraint port4Only { ports == 3; }
 
+	constraint concurrentPort {
+		ports == count % 4;
+	}
+
 	constraint addOnly { cmd == ADD; }
 	constraint subOnly { cmd == SUB; }
 	constraint LSLOnly { cmd == LSL; }
@@ -38,8 +42,17 @@ class transaction;
 	}
 
 	constraint dataOverflow {
-		data1 == 1;
-		data2 == 32'hFFFFFFFF;
+		data1 + data2 > 32'hFFFFFFFF;
+	}
+	
+	constraint addDataOverflow {
+		data1 + data2 > 32'hFFFFFFFF;
+		cmd == ADD;
+	}
+
+	constraint subDataUnderflow {
+		data1 - data2 < 0;
+		cmd == SUB;
 	}
 
 	constraint noOverUnderFlow {
@@ -47,9 +60,9 @@ class transaction;
 		data1 - data2 > 0;
 	}
 
-
-	
-	
+	constraint invalidCmd {
+		cmd != {0,1,2,5,6};
+	}
 
 	function new();
 		id = count++;
