@@ -18,33 +18,33 @@ class generator;
 	covergroup CovGroup;
     cmd : coverpoint trs.cmd 
 	{
-    	bins add    = {ADD};
-    	bins sub    = {SUB};
-	   bins shiftleft   = {LSL};
-	 	 bins shiftright   = {LSR};
-		  bins NOOP = {NOOP};
+    	bins add    	= {ADD};
+    	bins sub    	= {SUB};
+		bins shiftleft 	= {LSL};
+	 	bins shiftright	= {LSR};
+		bins NOOP 		= {NOOP};
     }	
     data1 : coverpoint trs.data1 
 	{
-      	bins zero    = {0};
-     	bins low    = {1,32'h7FFFFFFF};
-		bins high    = {32'h80000000,32'hFFFFFFFE};
-		bins max	 = {32'hFFFFFFFF};
+      	bins zero	= {0};
+     	bins low 	= {[1:32'h7FFFFFFF]};
+		bins high	= {[32'h80000000:32'hFFFFFFFE]};
+		bins max	= {32'hFFFFFFFF};
 
     } 
 	data2 : coverpoint trs.data2 
 	{
-      	bins zero    = {0};
-     	bins low    = {1,32'h7FFFFFFF};
-		bins high    = {32'h80000000,32'hFFFFFFFE};
-		bins max	 = {32'hFFFFFFFF};
+      	bins zero	= {0};
+     	bins low 	= {[1:32'h7FFFFFFF]};
+		bins high	= {[32'h80000000:32'hFFFFFFFE]};
+		bins max	= {32'hFFFFFFFF};
     } 
 	ports : coverpoint trs.ports 
 	{
- 	  	bins portOne    = {0};
-		bins portTwo    = {1};
-		bins portThree    = {2};
-		bins portFour    = {3};
+ 	  	wildcard bins portOne	= {4'b1???};
+		wildcard bins portTwo	= {4'b?1??};
+		wildcard bins portThree	= {4'b??1?};
+		wildcard bins portFour	= {4'b???1};
     } 
 	cross cmd, data1, data2, ports;	
   endgroup
@@ -56,7 +56,7 @@ class generator;
 		this.ended  		= ended;
 		this.gen_count = 0;
 		trs = new;
-		tr= new;
+		tr = new;
 		CovGroup = new();
 	endfunction
 
@@ -65,8 +65,8 @@ class generator;
 		repeat (repeat_count) begin  	// how many transactions to generate, specified in test
 			if(!this.trs.randomize()) 
 				$fatal("Gen: trans randomization failed");  // Randomize transaction
-		  $display("CMD: %d, PORT: %d, DATA1 %d,", trs.cmd, trs.ports, trs.data1);
-			trs.tag = gen_count % 4;					// cycle through tag values
+		  	$display("CMD: %d, PORT: %d, DATA1 %d,", trs.cmd, trs.ports, trs.data1);
+			trs.tag = gen_count % NUM_TAGS;					// cycle through tag values
 			CovGroup.sample();
 			tr = trs.copy;
 			gen2agt.put(tr);								// put in mailbox

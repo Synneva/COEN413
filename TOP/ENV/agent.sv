@@ -18,17 +18,9 @@ class agent;
 	forever begin
 		gen2agt.get(tr);
     	//$display("Gen to agent cmd: %d", tr.cmd);
-		agt2scb.put(tr);	// forward as is to scb
-
-		// send to right drivers
-		
+		agt2scb.put(tr);	// forward as is to scb and driver
 		agt2drv.put(tr);
-		//$display("Agent to driver cmd: %d", tr.cmd);
-		/*
-		foreach(tr.ports[i]) begin
-			if(tr.ports[i]) agt2drv[i].put(tr);
-		end
-*/
+
 	end	
 	endtask
 
