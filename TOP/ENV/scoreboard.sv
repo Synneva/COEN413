@@ -13,6 +13,8 @@ class scoreboard;
 	int trans_count;
 	transaction tr;
 	output_transaction otr;
+	logic [32:0] sum;
+
 
 	function new(mailbox agt2scb, scb2chk);
 		this.agt2scb = agt2scb;
@@ -32,7 +34,7 @@ class scoreboard;
 	function void expected_output(transaction tr, output_transaction otr);
 		otr.out_tag = tr.tag;
 		otr.ports = tr.ports;
-		logic [32:0] sum;
+		
 		case(tr.cmd)
 			NOOP:	begin
 						otr.out_resp = 0;
@@ -41,21 +43,25 @@ class scoreboard;
 
 			ADD:	begin		// add + overflow logic
                 		sum = tr.data1 + tr.data2;
-						if (sum[32])
+						if (sum[32]) begin
 							otr.out_data = 0;
 							otr.out_resp = 2;
-						else
+						end
+						else begin
 							otr.out_data = sum[31:0];
 							otr.out_resp = 1;
+						end
 					end
 
 			SUB:	begin		// sub + underflow logic
-						if(tr.data1 < tr.data2)
+						if(tr.data1 < tr.data2) begin
 							otr.out_data = 0;
 							otr.out_resp = 2;
-						else
+						end
+						else begin
 							otr.out_data = tr.data1 - tr.data2;
 							otr.out_resp = 1;
+						end
 					end
 
 			LSL:	begin

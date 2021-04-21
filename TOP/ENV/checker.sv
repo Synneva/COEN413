@@ -7,13 +7,13 @@ class check;
 
 	mailbox #(output_transaction) scb2chk, mon2chk[NUM_PORTS];
 	output_transaction tr_ex, tr_ac, temp;
-	output_transaction[$] missed_expected;
+	output_transaction missed_expected[$];
 
 
 	// checker stores scoreboard outputs in 2d array of queues
 		// each port is associated with an array of queues, one for each possible tag
 		// this way, we can use the tag of the actual output on a given port to find the corresponding expected values
-	output_transaction[$] expected[NUM_PORTS][NUM_TAGS];	// hope it works lol
+	output_transaction expected[NUM_PORTS][NUM_TAGS][$];	// hope it works lol
 	//output_transaction[$] actual[NUM_PORTS][NUM_TAGS];
 
 	function new(mailbox #(output_transaction) scb2chk, mon2chk[]);
@@ -21,7 +21,7 @@ class check;
 		this.mon2chk = mon2chk;
 		this.tr_ex = new();
 		this.tr_ac = new();
-		this.expected = new[NUM_PORTS][NUM_TAGS];
+		//this.expected = new[NUM_PORTS][NUM_TAGS];
 	endfunction
 
 /*
@@ -40,7 +40,7 @@ main idea: 2 threads, one gets from scb, other from monitors
 
 			foreach(mon2chk[i]) begin
 				if(mon2chk[i].try_get(tr_ac)) begin
-				temp = expected[i][tr_ac.tag].pop_front;
+				temp = expected[i][tr_ac.out_tag].pop_front;
 
 					if(temp.out_resp!=tr_ac.out_resp) begin
 						$display("Checker: Port %0d: Expected response %0d, got %0d", i+1, temp.out_resp, tr_ac.out_resp);
@@ -67,5 +67,6 @@ main idea: 2 threads, one gets from scb, other from monitors
 			end
 		end
 	endtask
+
 
 endclass
