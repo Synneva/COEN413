@@ -20,7 +20,7 @@ class monitor;
 	mailbox #(output_transaction) mon2chk;
 	int port;
 
-	function new(virtual calc_if intf, mailbox mon2chk, int i);
+	function new(virtual calc_if intf, mailbox #(output_transaction) mon2chk, int i);
 		this.intf = intf;
 		this.mon2chk = mon2chk;
 		this.port = i;

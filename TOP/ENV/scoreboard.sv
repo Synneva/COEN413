@@ -16,9 +16,9 @@ class scoreboard;
 	logic [32:0] sum;
 
 
-	function new(mailbox agt2scb, scb2chk);
-		this.agt2scb = agt2scb;
+	function new(mailbox #(transaction) agt2scb, mailbox #(output_transaction) scb2chk);
 		this.scb2chk = scb2chk;
+		this.agt2scb = agt2scb;
 	endfunction
 
 

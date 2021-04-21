@@ -61,7 +61,7 @@ class transaction;
 	}
 
 	constraint invalidCmd {
-		cmd != {0,1,2,5,6};
+		cmd != {NOOP,ADD,SUB,LSL,LSR};
 	}
 
 	function new();

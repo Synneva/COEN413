@@ -20,7 +20,7 @@ class driver;
 	mailbox #(transaction) agt2drv;
 	int port;
 
-	function new(virtual calc_if intf, mailbox agt2drv, int i);
+	function new(virtual calc_if intf, mailbox #(transaction) agt2drv, int i);
 		this.intf = intf;
 		this.agt2drv = agt2drv;
 		this.port = i;

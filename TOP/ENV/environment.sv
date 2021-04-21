@@ -40,8 +40,8 @@ class environment;
 	virtual calc_if intf;
 	
 	// mailboxes for ipc
-	mailbox #(transaction) gen2agt, agt2drv[NUM_PORTS], agt2scb;
-	mailbox #(output_transaction) scb2chk, mon2chk[NUM_PORTS];
+	mailbox #(transaction) gen2agt, agt2drv [], agt2scb;
+	mailbox #(output_transaction) scb2chk, mon2chk [];
 
 	event gen_ended;
 
@@ -52,8 +52,8 @@ class environment;
 		gen2agt = new();
 		agt2scb = new();
 		scb2chk = new();
-		agt2drv = new[NUM_PORTS];
-		mon2chk = new[NUM_PORTS];
+		agt2drv = new [NUM_PORTS];
+		mon2chk = new [NUM_PORTS];
 
 		gen = new(gen2agt, repeat_count, gen_ended);
 		agt = new(gen2agt, agt2scb, agt2drv);

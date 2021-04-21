@@ -46,13 +46,13 @@ program automatic tests(calc_if intf);
 
 		//lsl, #12
 		env.gen.tr.constraint_mode(0);
-		env.gen.tr.lslOnly.constraint_mode(1);
+		env.gen.tr.LSLOnly.constraint_mode(1);
 		env.gen.repeat_count = 20;
 		env.run();
 
 		//lsr, #13
 		env.gen.tr.constraint_mode(0);
-		env.gen.tr.lsrOnly.constraint_mode(1);
+		env.gen.tr.LSROnly.constraint_mode(1);
 		env.gen.repeat_count = 20;
 		env.run();
 
@@ -76,7 +76,7 @@ program automatic tests(calc_if intf);
 
 		//underflow for sub , #15
 		env.gen.tr.constraint_mode(0);
-		env.gen.tr.subDataOverflow.constraint_mode(1);
+		env.gen.tr.subDataUnderflow.constraint_mode(1);
 		env.gen.repeat_count = 20;
 		env.run();
 
