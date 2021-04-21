@@ -6,14 +6,13 @@
 class check;
 
 	mailbox #(output_transaction) scb2chk, mon2chk;
-  	output_transaction tr_ex, tr_ac, temp;
+  	output_transaction tr_ex, tr_ac, temp_ex, temp_ac;
 
 	// checker stores scoreboard outputs in 2d array of queues
 		// each port is associated with an array of queues, one for each possible tag
 		// this way, we can use the tag of the actual output on a given port to find the corresponding expected values
 	output_transaction expected[NUM_PORTS][NUM_TAGS][$];
-
-	//output_transaction[$] actual[NUM_PORTS][NUM_TAGS];
+	output_transaction actual[NUM_PORTS][NUM_TAGS][$];
 
 	function new(mailbox #(output_transaction) scb2chk, mon2chk);
 		this.scb2chk = scb2chk;
@@ -34,26 +33,44 @@ main forks a thread to get from scoreboard
 	
 		fork
 			get_scb;
+			get_mon;
+			//start_check;
 		join_none
 
-		forever begin
+		//forever begin
+		for(int port = 0; port<NUM_PORTS; port++) begin
+		for(int t = 0; t<NUM_TAGS; t++) begin
+			int t = 0;
 			
-			mon2chk.get(tr_ac);
-			wait(expected[tr_ac.port][tr_ac.out_tag].size);
-			temp = expected[tr_ac.port][tr_ac.out_tag].pop_front;
-
-					if(temp.out_resp!=tr_ac.out_resp) begin
-						$display("Checker: Port %0d: Expected response %0d, got %0d", tr_ac.port, temp.out_resp, tr_ac.out_resp);
-						//missed_expected.push_back(temp);
-					end
-					else if(temp.out_data!=tr_ac.out_data) begin
-						$display("Checker: Port %0d: Expected result %0d, got %0d", tr_ac.port, temp.out_data, tr_ac.out_data);
-						//missed_expected.push_back(temp);
-					end
-					else $display("Checker: Correct response on port %0d", tr_ac.port);
-			end
+		end
+		end
+		//end
+		
 	endtask
 
+	task get_mon;
+		forever begin
+			mon2chk.get(tr_ac);
+			if(tr_ac.out_resp) begin
+				actual[tr_ac.port][tr_ac.out_tag].push_back(tr_ac);
+				if(expected[tr_ac.port][tr_ac.out_tag].size) begin
+				temp_ac = actual[tr_ac.port][tr_ac.out_tag].pop_front;
+				temp_ex = expected[tr_ac.port][tr_ac.out_tag].pop_front;
+
+				if(temp_ex.out_resp!=temp_ac.out_resp) begin
+						$display("Checker: Port %0d: Expected response %0d, got %0d", tr_ac.port, temp_ex.out_resp, temp_ac.out_resp);
+						//missed_expected.push_back(temp);
+				end
+				else if(temp_ex.out_data!=temp_ac.out_data) begin
+						$display("Checker: Port %0d: Expected result %0d, got %0d", tr_ac.port, temp_ex.out_data, temp_ac.out_data);
+						//missed_expected.push_back(temp);
+				end
+				else $display("Checker: Correct response on port %0d", tr_ac.port);
+			end
+
+			end
+		end
+	endtask
 
 	task get_scb;
 		forever begin

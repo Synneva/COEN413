@@ -7,14 +7,16 @@ Generator class is responsible for generating the stimulus by randomizing the tr
 
 
 class generator;
-	rand transaction tr;			// Declare the transaction class handle as random
+	rand transaction trs;			// Declare the transaction class handle as random
+	transaction tr;
 	mailbox #(transaction) gen2agt; // Mailbox used to send the randomized transaction to agent
 	int repeat_count;   			// control the number of packets to be created	
 	event ended;					// event when all transactions generated
 	int gen_count;					// number transactions created so far
 
+
 	covergroup CovGroup;
-    cmd : coverpoint tr.cmd 
+    cmd : coverpoint trs.cmd 
 	{
     	bins add    = {ADD};
     	bins sub    = {SUB};
@@ -22,7 +24,7 @@ class generator;
 	 	 bins shiftright   = {LSR};
 		  bins NOOP = {NOOP};
     }	
-    data1 : coverpoint tr.data1 
+    data1 : coverpoint trs.data1 
 	{
       	bins zero    = {0};
      	bins low    = {1,32'h7FFFFFFF};
@@ -30,14 +32,14 @@ class generator;
 		bins max	 = {32'hFFFFFFFF};
 
     } 
-	data2 : coverpoint tr.data2 
+	data2 : coverpoint trs.data2 
 	{
       	bins zero    = {0};
      	bins low    = {1,32'h7FFFFFFF};
 		bins high    = {32'h80000000,32'hFFFFFFFE};
 		bins max	 = {32'hFFFFFFFF};
     } 
-	ports : coverpoint tr.ports 
+	ports : coverpoint trs.ports 
 	{
  	  	bins portOne    = {0};
 		bins portTwo    = {1};
@@ -53,17 +55,24 @@ class generator;
 		this.repeat_count   = repeat_count;
 		this.ended  		= ended;
 		this.gen_count = 0;
-		tr = new;
+		trs = new;
+		tr= new;
 		CovGroup = new();
 	endfunction
 
 	task main();
 		$display($time, ": Starting generator for %0d transactions", repeat_count);
 		repeat (repeat_count) begin  	// how many transactions to generate, specified in test
-			if(!this.tr.randomize()) 
+			if(!this.trs.randomize()) 
 				$fatal("Gen: trans randomization failed");  // Randomize transaction
-			tr.tag = gen_count % 4;					// cycle through tag values
+<<<<<<< HEAD
+			tr.tag = gen_count % NUM_TAGS;					// cycle through tag values
+=======
+		  $display("CMD: %d, PORT: %d, DATA1 %d,", trs.cmd, trs.ports, trs.data1);
+			trs.tag = gen_count % 4;					// cycle through tag values
+>>>>>>> a761f565e8b7459634881c7d83887764d21fe100
 			CovGroup.sample();
+			tr = trs.copy;
 			gen2agt.put(tr);								// put in mailbox
 			gen_count++;
 		end

@@ -71,16 +71,17 @@ class transaction;
 	// constraints?
 	// functions for display, copy, compare?
 
-/*
+
 	function transaction copy();
 		transaction to = new();
 		to.cmd  	= this.cmd;
 		to.data1	= this.data1;
 		to.data2	= this.data2;
 		to.tag  	= this.tag;
+		to.ports = this.ports;
 		copy = to;
 	endfunction: copy
-*/
+
 endclass
 
 class output_transaction;
