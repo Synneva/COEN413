@@ -12,7 +12,22 @@ class transaction;
 		 bit [TAG_WIDTH-1:0]	tag; 
 	rand bit [NUM_PORTS-1:0]	ports;
 
-	constraint port1Only { ports == 0; }	 // not sure if declare here + turn on/off in test or declare higher up
+	function new;
+		id = count++;
+	endfunction
+
+	function transaction copy();
+		transaction to = new();
+		to.cmd  	= this.cmd;
+		to.data1	= this.data1;
+		to.data2	= this.data2;
+		to.tag  	= this.tag;
+		to.ports 	= this.ports;
+		copy = to;
+	endfunction: copy
+
+
+	constraint port1Only { ports == 0; }
 	constraint port2Only { ports == 1; }
 	constraint port3Only { ports == 2; }
 	constraint port4Only { ports == 3; }
@@ -42,13 +57,13 @@ class transaction;
 	}
 
 	constraint dataOverflow {
-	   data1 > 32'h800000000;
-	   data2 > 32'h800000000;
+	   data1 > 32'h80000000;
+	   data2 > 32'h80000000;
 	}
 	
 	constraint addDataOverflow {
-		data1 > 32'h800000000;
-	  data2 > 32'h800000000;
+		data1 > 32'h80000000;
+	  	data2 > 32'h80000000;
 		cmd == ADD;
 	}
 
@@ -65,24 +80,6 @@ class transaction;
 	constraint invalidCmd {
 		!(cmd inside {NOOP,ADD,SUB,LSL,LSR});
 	}
-
-	function new;
-		id = count++;
-	endfunction
-
-	// constraints?
-	// functions for display, copy, compare?
-
-
-	function transaction copy();
-		transaction to = new();
-		to.cmd  	= this.cmd;
-		to.data1	= this.data1;
-		to.data2	= this.data2;
-		to.tag  	= this.tag;
-		to.ports = this.ports;
-		copy = to;
-	endfunction: copy
 
 endclass
 

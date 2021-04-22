@@ -10,7 +10,7 @@ class driver;
 	virtual calc_if.DRIVER intf;
 	mailbox #(transaction) agt2drv;
 
-	function new(virtual calc_if.DRIVER intf, mailbox #(transaction) agt2drv);
+	function new(virtual calc_if intf, mailbox #(transaction) agt2drv);
 		this.intf = intf;
 		this.agt2drv = agt2drv;
 		this.trans_count = 0;
@@ -22,7 +22,7 @@ class driver;
 			intf.cb.in_port[i].data_in = 0;
 			intf.cb.in_port[i].tag_in = 0;
 		end
-		$display("Driving inputs low");
+		$display("Resetting inputs");
 	endtask
 
 	task main;
@@ -35,9 +35,8 @@ class driver;
 					drive_port(2);
 					drive_port(3);
 				join
-			$display("Drove transaction %0s on ports %0b (%0d)", tr.cmd, tr.ports, trans_count);
+			//$display("Drove transaction %0s on ports %0b (%0d)", tr.cmd, tr.ports, trans_count);
 			trans_count++;
-			//$display("Drove transaction %0s on port %0d (%0d)", tr.cmd, tr.ports, trans_count);
 		end
 	endtask
 
@@ -52,7 +51,7 @@ class driver;
 		intf.cb.in_port[p].tag_in		= 0;
 		@(intf.cb);
 		intf.cb.in_port[p].data_in		= 0;
-		
+		@(intf.cb);
 		end
 	endtask
 

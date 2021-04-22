@@ -10,10 +10,6 @@ test code in program block
 program automatic tests(calc_if intf);
 	environment env;
 
-	// transactions constraints? ports, commands
-			// maybe separate files for directed, constrained, random if needed
-
-
 	initial begin
 	  
 	  $display("Test#1 No Constraints");
@@ -24,7 +20,8 @@ program automatic tests(calc_if intf);
 		env.run();
 		//Testing #1,2,3,4
 
-    $display("Test#2 Only Port 1");
+    	$display("Test#2 Only Port 1");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.port1Only.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -32,6 +29,7 @@ program automatic tests(calc_if intf);
 
 		//Testing #5,6,7
 		$display("Test#3 Concurrent Ports");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.concurrentPort.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -39,6 +37,7 @@ program automatic tests(calc_if intf);
 
 		//add, #10
 		$display("Test#4 Only Add");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.addOnly.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -46,6 +45,7 @@ program automatic tests(calc_if intf);
 
 		//sub, #11
 		$display("Test#5 Only Subtract");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.subOnly.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -53,6 +53,7 @@ program automatic tests(calc_if intf);
 
 		//lsl, #12
 		$display("Test#6 Only LSL");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.LSLOnly.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -60,6 +61,7 @@ program automatic tests(calc_if intf);
 
 		//lsr, #13
 		$display("Test#7 Only LSR");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.LSROnly.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -67,6 +69,7 @@ program automatic tests(calc_if intf);
 
 		//both shifts, #14
 		$display("Test#8 Shift ALU");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.lslLsr.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -74,6 +77,7 @@ program automatic tests(calc_if intf);
 
 		//overflow , #16
 		$display("Test#9 Data Overflow Conditions");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.dataOverflow.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -81,6 +85,7 @@ program automatic tests(calc_if intf);
 
 		//overflow for add , #16
 		$display("Test#10 Add Overflow Conditions");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.addDataOverflow.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -88,6 +93,7 @@ program automatic tests(calc_if intf);
 
 		//underflow for sub , #15
 		$display("Test#11 Subtract Underflow Conditions");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.subDataUnderflow.constraint_mode(1);
 		env.gen.repeat_count = 20;
@@ -101,19 +107,23 @@ program automatic tests(calc_if intf);
 		env.run();
 
 */
+
     $display("Test#12 Valid Data no under/overflow");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.noOverUnderFlow.constraint_mode(1);
 		env.gen.repeat_count = 100;
 		env.run();
-		
+
     $display("Test#13 Data All Max");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.dataMax.constraint_mode(1);
 		env.gen.repeat_count = 20;
 		env.run();
-		
+
 		$display("Test#14 Data All Zero");
+		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.dataZero.constraint_mode(1);
 		env.gen.repeat_count = 20;

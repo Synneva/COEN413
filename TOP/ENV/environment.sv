@@ -26,7 +26,7 @@
 
 
 class environment;
-	int repeat_count = 30;
+	int repeat_count;
 	int finish_count = 0;
 
 	// testbench components
@@ -59,25 +59,21 @@ class environment;
 		gen = new(gen2agt, repeat_count, gen_ended);
 		agt = new(gen2agt, agt2scb, agt2drv);
 		scb = new(agt2scb, scb2chk);
-		chk = new(scb2chk, mon2chk);
+		chk = new(scb2chk, mon2chk, repeat_count);
 		drv = new(intf, agt2drv);
 		mon = new(intf, mon2chk);
-
-		//drv = new[NUM_PORTS];
-		//mon = new[NUM_PORTS];
 
 	endfunction
 
 
 	// tasks for pre_test, test, post_test, run?
 	task pre_test();
-		// initialization, reset n stuf
-		//drv.reset;
-
+		chk = new(scb2chk, mon2chk, repeat_count);
+		
 	endtask
 
 	task do_test();
-		// fork main()s
+		// fork mains
 		fork
 			gen.main;
 			agt.main;
@@ -86,26 +82,25 @@ class environment;
 			mon.main;
 			chk.main;
 		join_any
+		
 	endtask
 
 	task post_test();
 		wait(gen.ended.triggered());
-		//wait(gen.repeat_count == drv.trans_count);
+
 		//$display("CB WATCH ABOUT TO BE CREATED %d", finish_count);
 		finish_count = 0;
 		fork
 		  cb_watch;
 		  mon_watch;
-		join_any
-		
+		join_any		
 		//$display("CB WATCH ENDED %d", finish_count);
-		
-		//wait(gen.repeat_count == chk.ac_count);
+
 	endtask
 	
-	task cb_watch();
+	task cb_watch;
   forever begin
-    @(intf.MONITOR.cb.out_port)
+    @(intf.cb.out_port)
       if (finish_count > 30)
        break;
       finish_count = 0;
@@ -114,13 +109,14 @@ class environment;
   end
 	endtask
 
-  task mon_watch();	
+  task mon_watch;	
 		forever begin 
-	  @(posedge intf.MONITOR.clk)
-      finish_count++;
-      //$display(" finish incremented %d", finish_count);
-    if (finish_count > 30)
-       break;
+			@(intf.clk)
+	  		//@(posedge intf.MONITOR.clk)
+      		finish_count++;
+      		//$display(" finish incremented %d", finish_count);
+    		if (finish_count > 30)
+       			break;
   end
 endtask;
 	
