@@ -59,6 +59,7 @@ class check;
 				else $display("Checker: Correct response on port %0d", tr_ac.port);
 			end
 			ac_count++;
+			//$display("%d", ac_count);
 			end
 		end
 	endtask
