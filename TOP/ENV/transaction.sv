@@ -26,10 +26,10 @@ class transaction;
 	constraint LSLOnly { cmd == LSL; }
 	constraint LSROnly { cmd == LSR; }
 
-	constraint validCmd { cmd == {ADD,SUB,LSL,LSR}; }
+	constraint validCmd { cmd inside {ADD,SUB,LSL,LSR}; }
 
-	constraint addSub { cmd == {ADD,SUB}; }
-	constraint lslLsr { cmd == {LSL,LSR}; }
+	constraint addSub { cmd inside {ADD,SUB}; }
+	constraint lslLsr { cmd inside {LSL,LSR}; }
 
 	constraint dataZero {
 		data1 == 0;
@@ -42,16 +42,18 @@ class transaction;
 	}
 
 	constraint dataOverflow {
-		data1 + data2 > 32'hFFFFFFFF;
+	   data1 > 32'h800000000;
+	   data2 > 32'h800000000;
 	}
 	
 	constraint addDataOverflow {
-		data1 + data2 > 32'hFFFFFFFF;
+		data1 > 32'h800000000;
+	  data2 > 32'h800000000;
 		cmd == ADD;
 	}
 
 	constraint subDataUnderflow {
-		data1 - data2 < 0;
+		data2 > data1;
 		cmd == SUB;
 	}
 
@@ -61,7 +63,7 @@ class transaction;
 	}
 
 	constraint invalidCmd {
-		cmd != {NOOP,ADD,SUB,LSL,LSR};
+		!(cmd inside {NOOP,ADD,SUB,LSL,LSR});
 	}
 
 	function new;

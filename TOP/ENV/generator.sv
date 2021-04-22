@@ -65,7 +65,7 @@ class generator;
 		repeat (repeat_count) begin  	// how many transactions to generate, specified in test
 			if(!this.trs.randomize()) 
 				$fatal("Gen: trans randomization failed");  // Randomize transaction
-		  	$display("CMD: %d, PORT: %d, DATA1 %d,", trs.cmd, trs.ports, trs.data1);
+		  	$display("CMD: %d, PORT: %d, DATA1 %d, DATA2 %d", trs.cmd, trs.ports, trs.data1, trs.data2);
 			trs.tag = gen_count % NUM_TAGS;					// cycle through tag values
 			CovGroup.sample();
 			tr = trs.copy;

@@ -27,6 +27,7 @@
 
 class environment;
 	int repeat_count = 30;
+	int finish_count = 0;
 
 	// testbench components
 	generator 	gen;
@@ -90,8 +91,39 @@ class environment;
 	task post_test();
 		wait(gen.ended.triggered());
 		//wait(gen.repeat_count == drv.trans_count);
-		wait(gen.repeat_count == scb.trans_count);
+		//$display("CB WATCH ABOUT TO BE CREATED %d", finish_count);
+		finish_count = 0;
+		fork
+		  cb_watch;
+		  mon_watch;
+		join_any
+		
+		//$display("CB WATCH ENDED %d", finish_count);
+		
+		//wait(gen.repeat_count == chk.ac_count);
 	endtask
+	
+	task cb_watch();
+  forever begin
+    @(intf.MONITOR.cb.out_port)
+      if (finish_count > 30)
+       break;
+      finish_count = 0;
+      //$display(" finish RESET %d", finish_count);
+      
+  end
+	endtask
+
+  task mon_watch();	
+		forever begin 
+	  @(posedge intf.MONITOR.clk)
+      finish_count++;
+      //$display(" finish incremented %d", finish_count);
+    if (finish_count > 30)
+       break;
+  end
+endtask;
+	
 
 	task run;
 		pre_test();
