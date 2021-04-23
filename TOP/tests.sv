@@ -9,6 +9,7 @@ test code in program block
 
 program automatic tests(calc_if intf);
 	environment env;
+  
 
 	initial begin
 	  
@@ -28,10 +29,10 @@ program automatic tests(calc_if intf);
 		env.run();
 
 		//Testing #5,6,7
-		$display("Test#3 Concurrent Ports");
+		$display("Test#3 All Port Combinations");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
-		env.gen.trs.concurrentPort.constraint_mode(1);
+		env.gen.trs.allPortCombinations.constraint_mode(1);
 		env.gen.repeat_count = 20;
 		env.run();
 
@@ -67,8 +68,16 @@ program automatic tests(calc_if intf);
 		env.gen.repeat_count = 20;
 		env.run();
 
-		//both shifts, #14
+    //Add/sub, #11
 		$display("Test#8 Shift ALU");
+		env = new(intf);
+		env.gen.trs.constraint_mode(0);
+		env.gen.trs.addSub.constraint_mode(1);
+		env.gen.repeat_count = 20;
+		env.run();
+
+		//both shifts, #14
+		$display("Test#9 Shift ALU");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.lslLsr.constraint_mode(1);
@@ -76,7 +85,7 @@ program automatic tests(calc_if intf);
 		env.run();
 
 		//overflow , #16
-		$display("Test#9 Data Overflow Conditions");
+		$display("Test#10 Data Overflow Conditions");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.dataOverflow.constraint_mode(1);
@@ -84,7 +93,7 @@ program automatic tests(calc_if intf);
 		env.run();
 
 		//overflow for add , #16
-		$display("Test#10 Add Overflow Conditions");
+		$display("Test#11 Add Overflow Conditions");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.addDataOverflow.constraint_mode(1);
@@ -92,7 +101,7 @@ program automatic tests(calc_if intf);
 		env.run();
 
 		//underflow for sub , #15
-		$display("Test#11 Subtract Underflow Conditions");
+		$display("Test#12 Subtract Underflow Conditions");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.subDataUnderflow.constraint_mode(1);
@@ -108,21 +117,21 @@ program automatic tests(calc_if intf);
 
 */
 
-    $display("Test#12 Valid Data no under/overflow");
+    $display("Test#13 Valid Data no under/overflow");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.noOverUnderFlow.constraint_mode(1);
 		env.gen.repeat_count = 100;
 		env.run();
 
-    $display("Test#13 Data All Max");
+    $display("Test#14 Data All Max");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.dataMax.constraint_mode(1);
 		env.gen.repeat_count = 20;
 		env.run();
 
-		$display("Test#14 Data All Zero");
+		$display("Test#15 Data All Zero");
 		env = new(intf);
 		env.gen.trs.constraint_mode(0);
 		env.gen.trs.dataZero.constraint_mode(1);
