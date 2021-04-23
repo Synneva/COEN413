@@ -27,13 +27,10 @@ class transaction;
 	endfunction: copy
 
 
-	constraint port1Only { ports == 0; }
-	constraint port2Only { ports == 1; }
-	constraint port3Only { ports == 2; }
-	constraint port4Only { ports == 3; }
+	constraint port1Only { ports == 4'b0001; }
 
-	constraint concurrentPort {
-		ports == count % 4;
+	constraint allPortCombinations {
+		ports == count % 16;
 	}
 
 	constraint addOnly { cmd == ADD; }

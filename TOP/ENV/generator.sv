@@ -16,6 +16,11 @@ class generator;
 
 
 	covergroup CovGroup;
+	
+	   option.per_instance = 0;
+    type_option.merge_instances = 1;
+    
+    
     cmd : coverpoint trs.cmd 
 	{
     	bins add    	= {ADD};
